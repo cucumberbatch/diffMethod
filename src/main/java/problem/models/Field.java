@@ -3,110 +3,68 @@ package problem.models;
 import problem.calculation.FiniteDifferenceMethod;
 import problem.conditions.BoundaryCondition;
 import problem.utils.FieldConfiguration;
+import problem.utils.view.DataViewer;
+
+import java.io.IOException;
 
 public class Field {
 
-	private Matrix matrix;
-	private BoundaryCondition condition;
-	private FiniteDifferenceMethod method;
+    private FieldConfiguration configuration;
+    private BoundaryCondition condition;
+    private FiniteDifferenceMethod method;
 
-	private double Length;
-	private double Time;
+    public Field(
+            double length, double time,
+            int n, int m) {
+        configuration = new FieldConfiguration(
+                new Matrix(n + 1, m + 1),
+                length / n,
+                time / m
+        );
+    }
 
-	private double lengthStep;
-	private double timeStep;
+    public void applyBoundaryCondition(BoundaryCondition condition) {
+        condition.apply(configuration);
+    }
 
-	public Field(double Length, double Time, int N, int M) {
-		matrix = new Matrix(N, M);
-		setLength(Length);
-		setTime(Time);
-		setLengthStep();
-		setTimeStep();
-	}
+    public void applyDifferenceMethod(FiniteDifferenceMethod diffMethod) {
+        configuration = diffMethod.solve(configuration, null);
+    }
 
-	public Field(double Length, double Time, int N, int M, BoundaryCondition condition) {
-		this(Length, Time, N, M);
-		this.condition = condition;
-	}
+    public void viewDataOn(DataViewer container) throws IOException {
+        if (container == null) {
+            return;
+        }
 
+        container.view(configuration);
+    }
 
-	public void applyBoundaryCondition() {
-		if (condition == null) {
-			return;
-		}
+    public Matrix getMatrix() {
+        return new Matrix(configuration.matrix);
+    }
 
-		FieldConfiguration configuration = new FieldConfiguration(this);
-		condition.apply(configuration);
-		this.matrix = configuration.matrix;
-	}
+    public double getLength() {
+        return configuration.length;
+    }
 
-	public void applyBoundaryCondition(BoundaryCondition condition) {
-		this.condition = condition;
-		applyBoundaryCondition();
-	}
+    public double getTime() {
+        return configuration.time;
+    }
 
-	// TODO: make
-	public void collectDataTo() {
+    public int getN() {
+        return configuration.matrix.getN();
+    }
 
-	}
+    public int getM() {
+        return configuration.matrix.getM();
+    }
 
-	public void applyDifferenceMethod() {
-		if (method == null) {
-			return;
-		}
+    public double getLengthStep() {
+        return configuration.lengthStep;
+    }
 
-
-	}
-
-	public void applyDifferenceMethod(FiniteDifferenceMethod diffMethod) {
-		this.method = diffMethod;
-		applyDifferenceMethod();
-	}
-
-	public void solveProblem() {
-
-	}
-
-	public Matrix getMatrix() {
-		return new Matrix(matrix);
-	}
-
-	public double getLength() {
-		return Length;
-	}
-
-	public double getTime() {
-		return Time;
-	}
-
-	public int getN() {
-		return matrix.getN();
-	}
-
-	public int getM() {
-		return matrix.getM();
-	}
-
-	public double getLengthStep() {
-		return lengthStep;
-	}
-
-	public double getTimeStep() {
-		return timeStep;
-	}
-
-
-	private void setLength(double length) {
-		Length = length;
-	}
-	private void setTime(double time) {
-		Time = time;
-	}
-	private void setLengthStep() {
-		lengthStep = Length / matrix.getN();
-	}
-	private void setTimeStep() {
-		timeStep = Time / matrix.getM();
-	}
+    public double getTimeStep() {
+        return configuration.timeStep;
+    }
 
 }
