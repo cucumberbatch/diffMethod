@@ -10,6 +10,12 @@ import java.io.IOException;
 public class FieldManager {
     private Field field;
 
+
+    public FieldManager init(FieldConfiguration configuration) {
+        this.field = new Field(configuration);
+        return this;
+    }
+
     public FieldManager init(double length, double time,int n, int m) {
         this.field = new Field(length, time, n, m);
         return this;

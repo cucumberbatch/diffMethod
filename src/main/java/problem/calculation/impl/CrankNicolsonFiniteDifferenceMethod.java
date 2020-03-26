@@ -3,17 +3,24 @@ package problem.calculation.impl;
 import problem.calculation.FiniteDifferenceMethod;
 import problem.models.Field;
 import problem.utils.FieldConfiguration;
-import problem.utils.matrix.solver.LinearEquationsSystemSolver;
+
+import java.util.logging.Logger;
 
 public class CrankNicolsonFiniteDifferenceMethod implements FiniteDifferenceMethod {
+    private Logger log;
 
-	@Override
-	public FieldConfiguration solve(FieldConfiguration configuration, LinearEquationsSystemSolver solver) {
-		return null;
-	}
+    @Override
+    public void setLogger(Logger log) {
+        this.log = log;
+    }
 
-	public CrankNicolsonFiniteDifferenceMethod(Field field) {
+    @Override
+    public FieldConfiguration solve(FieldConfiguration configuration) {
+        return null;
+    }
 
-	}
+    public CrankNicolsonFiniteDifferenceMethod(Field field) {
+
+    }
 
 }

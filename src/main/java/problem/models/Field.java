@@ -6,65 +6,61 @@ import problem.utils.FieldConfiguration;
 import problem.utils.view.DataViewer;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Objects;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 public class Field {
-
     private FieldConfiguration configuration;
-    private BoundaryCondition condition;
-    private FiniteDifferenceMethod method;
+    private static Logger log = null;
 
-    public Field(
-            double length, double time,
-            int n, int m) {
-        configuration = new FieldConfiguration(
-                new Matrix(n + 1, m + 1),
-                length / n,
-                time / m
-        );
+    //Logger initialization with property file in resources package
+    static {
+        InputStream stream = Field.class.getClassLoader().
+                getResourceAsStream("logging.properties");
+        try {
+            LogManager.getLogManager().readConfiguration(stream);
+            log = Logger.getLogger(Field.class.getName());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Field(FieldConfiguration configuration) {
+        this.configuration = configuration;
+    }
+
+    public Field(double length, double time, int n, int m) {
+        configuration = new FieldConfiguration(new double[m+1][n+1], length / n, time / m);
     }
 
     public void applyBoundaryCondition(BoundaryCondition condition) {
+        condition.setLogger(log);
         condition.apply(configuration);
     }
 
-    public void applyDifferenceMethod(FiniteDifferenceMethod diffMethod) {
-        configuration = diffMethod.solve(configuration, null);
+    public void applyDifferenceMethod(FiniteDifferenceMethod method) {
+        method.setLogger(log);
+        method.solve(configuration);
     }
 
     public void viewDataOn(DataViewer container) throws IOException {
-        if (container == null) {
-            return;
-        }
-
+        container.setLogger(log);
         container.view(configuration);
     }
 
-    public Matrix getMatrix() {
-        return new Matrix(configuration.matrix);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Field field = (Field) o;
+        return configuration.equals(field.configuration);
     }
 
-    public double getLength() {
-        return configuration.length;
+    @Override
+    public int hashCode() {
+        return Objects.hash(configuration);
     }
-
-    public double getTime() {
-        return configuration.time;
-    }
-
-    public int getN() {
-        return configuration.matrix.getN();
-    }
-
-    public int getM() {
-        return configuration.matrix.getM();
-    }
-
-    public double getLengthStep() {
-        return configuration.lengthStep;
-    }
-
-    public double getTimeStep() {
-        return configuration.timeStep;
-    }
-
 }

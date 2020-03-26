@@ -3,10 +3,10 @@ package problem;
 public class Constants {
 
     // Parameters of grid:
-    public static final double Length	= 1.0d;		// length or depth of sample
-    public static final double Time		= 0.05d;	// total time of experiment
-    public static final int N			= 20;		// amount of steps for length fracture
-    public static final int M			= 20;		// amount of steps for time fracture
+    public static final double Length	= 5.0d;     // length or depth of sample
+    public static final double Time		= 1.0d;     // total time of experiment
+    public static final int N			= 25;       // amount of steps for length fracture
+    public static final int M			= 50;       // amount of steps for time fracture
 
     // Simulation parameters
     public static final double U0 		= 1.0d;

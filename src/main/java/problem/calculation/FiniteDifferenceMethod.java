@@ -1,9 +1,11 @@
 package problem.calculation;
 
-import problem.models.Matrix;
 import problem.utils.FieldConfiguration;
-import problem.utils.matrix.solver.LinearEquationsSystemSolver;
+import problem.utils.Loggable;
 
-public interface FiniteDifferenceMethod {
-    FieldConfiguration solve(FieldConfiguration configuration, LinearEquationsSystemSolver solver);
+/**
+ * Interface for implementing difference methods
+ */
+public interface FiniteDifferenceMethod extends Loggable {
+    FieldConfiguration solve(FieldConfiguration configuration);
 }

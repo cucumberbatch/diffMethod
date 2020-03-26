@@ -2,28 +2,42 @@ package problem.calculation.impl;
 
 import problem.Constants;
 import problem.calculation.FiniteDifferenceMethod;
-import problem.models.Matrix;
 import problem.solution.Solution;
 import problem.utils.FieldConfiguration;
-import problem.utils.matrix.solver.LinearEquationsSystemSolver;
+import problem.utils.LogMessage;
 
-public class ExplicitFiniteDifferenceMethod implements FiniteDifferenceMethod {
+import java.util.logging.Logger;
+
+public final class ExplicitFiniteDifferenceMethod implements FiniteDifferenceMethod {
+    private Logger log;
+
     @Override
-    public FieldConfiguration solve(FieldConfiguration configuration, LinearEquationsSystemSolver solver) {
-        Solution solution = new Solution();
-        Matrix matrix = configuration.matrix;
-        double gamma = 1;//Constants.a_sqr * configuration.timeStep / configuration.lengthStep / configuration.lengthStep;
+    public void setLogger(Logger log) {
+        this.log = log;
+    }
 
-        for (int j = 0; j < matrix.getM() - 1; j++) {
-            for (int i = 1; i < matrix.getN() - 1; i++) {
-                matrix.value(i, j + 1,
-                        matrix.value(i - 1, j) * gamma +            // left bottom point
-                        matrix.value(i, j) * (1 - 2 * gamma) +      // center bottom point
-                        matrix.value(i + 1, j) * gamma +            // right bottom point
-                        solution.u(i, j) * configuration.timeStep   // predict solution in point
+    @Override
+    public FieldConfiguration solve(FieldConfiguration configuration) {
+        Solution solution = new Solution();
+        double[][] matrix = configuration.matrix;
+        double gamma = Constants.a_sqr * configuration.timeStep / configuration.lengthStep / configuration.lengthStep;
+
+        if (gamma > 0.5d) {
+            log.warning(LogMessage.DIFF_METHOD_INACCURACY.getMessageString() + " :\tgamma = " + Double.toString(gamma));
+        }
+
+        for (int m = 0; m < configuration.m-1; m++) {
+            for (int n = 1; n < configuration.n-1; n++) {
+                matrix[m+1][n] = (
+                        matrix[m][n-1] * gamma +                    // left bottom point
+                        matrix[m][n+1] * gamma +                    // right bottom point
+                        matrix[m][n  ] * (1 - 2 * gamma) +            // center bottom point
+                        solution.u(n, m) * configuration.timeStep   // predict solution in point
                 );
             }
         }
+
+        log.info(LogMessage.DIFF_METHOD_DONE.getMessageString());
 
         return new FieldConfiguration(matrix, configuration.lengthStep, configuration.timeStep);
     }
