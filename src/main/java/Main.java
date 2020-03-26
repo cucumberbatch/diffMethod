@@ -1,9 +1,8 @@
 import problem.Constants;
-import problem.calculation.impl.ImplicitFiniteDifferenceMethod;
+import problem.calculation.impl.ExplicitFiniteDifferenceMethod;
 import problem.conditions.impl.OneDimensionHeatConductionBoundaryCondition;
 import problem.utils.FieldManager;
-import problem.utils.matrix.solver.impl.GaussMatrixAlgorithm;
-import problem.utils.view.impl.DataFileSerializer;
+import problem.utils.view.impl.ConsoleDataViewer;
 
 import java.io.IOException;
 
@@ -14,8 +13,9 @@ public class Main {
         FieldManager manager = new FieldManager();
         manager.init(Constants.Length, Constants.Time, Constants.N, Constants.M)
                 .applyBoundaryCondition(new OneDimensionHeatConductionBoundaryCondition())
-                .applyDifferenceMethod(new ImplicitFiniteDifferenceMethod(new GaussMatrixAlgorithm()))
-                .viewDataOn(new DataFileSerializer("file"))
+                .applyDifferenceMethod(new ExplicitFiniteDifferenceMethod())
+                .viewDataOn(new ConsoleDataViewer())
+                //.viewDataOn(new DataFileSerializer("file"))
                 .done();
 
     }

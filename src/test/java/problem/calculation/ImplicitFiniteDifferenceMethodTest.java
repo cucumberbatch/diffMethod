@@ -2,7 +2,6 @@ package problem.calculation;
 
 import org.junit.jupiter.api.Test;
 import problem.calculation.impl.ExplicitFiniteDifferenceMethod;
-import problem.conditions.BoundaryCondition;
 import problem.models.Field;
 import problem.utils.FieldManager;
 import problem.utils.view.impl.ConsoleDataViewer;
@@ -22,7 +21,7 @@ class ImplicitFiniteDifferenceMethodTest {
                     if (x == 0) {
                         return 1;
                     }
-                    if (x == 0.5) {
+                    if (x == 1) {
                         return 1;
                     }
                     if (t == 0) {

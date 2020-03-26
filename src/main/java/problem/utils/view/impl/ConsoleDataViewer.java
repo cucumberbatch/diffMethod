@@ -1,42 +1,39 @@
 package problem.utils.view.impl;
 
+import problem.Constants;
 import problem.utils.FieldConfiguration;
 import problem.utils.view.DataViewer;
 
-import java.util.logging.Logger;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ConsoleDataViewer implements DataViewer {
-
-    @Override
-    public void setLogger(Logger log) {
-    }
-
     @Override
     public void view(FieldConfiguration configuration) {
+        DecimalFormat formatter = new DecimalFormat(Constants.CONSOLE_OUTPUT_FORMAT);
+        List<String> buffer = new ArrayList<>();
+        String temp = "\n   --  \t| ";
 
-        // TODO: replace repeated console method calls with a single output method call
-        System.out.print("\t");
 
         // Print the line of length range
         for (int n = 0; n < configuration.n; n++) {
-            System.out.print(n * configuration.lengthStep + "\t");
+            temp = temp.concat(formatter.format(n * configuration.lengthStep) + "\t");
         }
-
-        System.out.print('\n');
+        buffer.add(temp + "\n");
 
         // Print all table of data
         for (int m = configuration.m - 1; m >= 0; m--) {
             // Show current time step
-            System.out.print(m * configuration.timeStep + "\t");
+            temp = formatter.format(m * configuration.timeStep).concat("\t| ");
 
             // Show the line of calculated data
             for (int n = 0; n < configuration.n; n++) {
-                System.out.print(configuration.matrix[m][n] + "\t");
+                temp = temp.concat(formatter.format(configuration.matrix[m][n]) + "\t");
             }
-
-            System.out.print('\n');
-
+            buffer.add(temp + "\n");
         }
-        System.out.print('\n');
+
+        System.out.print(buffer);
     }
 }

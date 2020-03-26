@@ -25,4 +25,7 @@ public class Constants {
 
     // Output data folder destination
     public static final String DATA_FOLDER = "D:\\User\\Documents\\_collected\\";
+
+    // Output format for data in console
+    public static final String CONSOLE_OUTPUT_FORMAT = "#0.00";
 }
