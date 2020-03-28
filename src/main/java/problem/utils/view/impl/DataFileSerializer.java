@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class DataFileSerializer implements DataViewer {
@@ -27,30 +29,33 @@ public class DataFileSerializer implements DataViewer {
     @Override
     public void view(FieldConfiguration configuration) throws FileNotFoundException, IOException {
         try (FileWriter writer = new FileWriter(file, false)) {
+            List<String> buffer = new ArrayList<>();
+            String temp = "\t";
 
-            // TODO: replace repeated writer method calls with a single writer method call
-            writer.write("\t");
 
             // Print the line of length range
             for (int i = 0; i < configuration.n; i++) {
-                writer.write(Double.toString(i * configuration.lengthStep).replace('.', ',') + "\t");
+                temp = temp.concat(Double.toString(i * configuration.lengthStep)).concat("\t");
             }
-
-            writer.write("\n");
+            buffer.add(temp.concat("\n"));
 
             // Print all table of data
             for (int i = configuration.m - 1; i >= 0; i--) {
                 // Show current time step
-                writer.write(Double.toString(i * configuration.timeStep).replace('.', ',') + "\t");
+                temp = Double.toString(i * configuration.timeStep).concat("\t");
 
                 // Show the line of calculated data
                 for (int j = 0; j < configuration.n; j++) {
-                    writer.write(Double.toString(configuration.matrix[i][j]).replace('.', ',') + "\t");
+                    temp = temp.concat(Double.toString(configuration.matrix[i][j])).concat("\t");
                 }
-
-                writer.write("\n");
-
+                buffer.add(temp.concat("\n"));
             }
+
+            // Write all data lines into the file
+            for (String row : buffer) {
+                writer.write(row.replace(".", ","));
+            }
+
             log.info(LogMessage.DATA_SERIALIZER_DONE.getMessageString());
         }
     }

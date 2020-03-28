@@ -3,6 +3,7 @@ import problem.calculation.impl.ExplicitFiniteDifferenceMethod;
 import problem.conditions.impl.OneDimensionHeatConductionBoundaryCondition;
 import problem.utils.FieldManager;
 import problem.utils.view.impl.ConsoleDataViewer;
+import problem.utils.view.impl.DataFileSerializer;
 
 import java.io.IOException;
 
@@ -15,7 +16,7 @@ public class Main {
                 .applyBoundaryCondition(new OneDimensionHeatConductionBoundaryCondition())
                 .applyDifferenceMethod(new ExplicitFiniteDifferenceMethod())
                 .viewDataOn(new ConsoleDataViewer())
-                //.viewDataOn(new DataFileSerializer("file"))
+                .viewDataOn(new DataFileSerializer("file"))
                 .done();
 
     }
