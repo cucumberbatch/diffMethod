@@ -1,7 +1,8 @@
 import problem.Constants;
-import problem.calculation.impl.ExplicitFiniteDifferenceMethod;
+import problem.calculation.impl.CrankNicolsonFiniteDifferenceMethod;
 import problem.conditions.impl.OneDimensionHeatConductionBoundaryCondition;
 import problem.utils.FieldManager;
+import problem.utils.matrix.solver.impl.GaussMatrixAlgorithm;
 import problem.utils.view.impl.ConsoleDataPrinter;
 import problem.utils.view.impl.FileDataPrinter;
 
@@ -14,11 +15,10 @@ public class Main {
         FieldManager manager = new FieldManager();
         manager.init(Constants.Length, Constants.Time, Constants.N, Constants.M)
                 .applyBoundaryCondition(new OneDimensionHeatConductionBoundaryCondition())
-                .applyDifferenceMethod(new ExplicitFiniteDifferenceMethod())
+                .applyDifferenceMethod(new CrankNicolsonFiniteDifferenceMethod(new GaussMatrixAlgorithm()))
                 .viewDataOn(new ConsoleDataPrinter())
                 .viewDataOn(new FileDataPrinter("file"))
                 .done();
     }
-
 }
 

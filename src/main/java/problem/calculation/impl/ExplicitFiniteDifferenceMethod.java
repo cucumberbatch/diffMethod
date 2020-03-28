@@ -17,28 +17,30 @@ public final class ExplicitFiniteDifferenceMethod implements FiniteDifferenceMet
     }
 
     @Override
-    public FieldConfiguration solve(FieldConfiguration configuration) {
+    public FieldConfiguration solve(FieldConfiguration conf) {
         Solution solution = new Solution();
-        double[][] matrix = configuration.matrix;
-        double gamma = Constants.a_sqr * configuration.timeStep / configuration.lengthStep / configuration.lengthStep;
+        double[][] matrix = conf.matrix;
+        double gamma = Constants.a_sqr * conf.timeStep / conf.lengthStep / conf.lengthStep;
 
         if (gamma > 0.5d) {
             log.warning(LogMessage.DIFF_METHOD_INACCURACY.getMessageString() + " :\tgamma = " + Double.toString(gamma));
         }
 
-        for (int m = 0; m < configuration.m-1; m++) {
-            for (int n = 1; n < configuration.n-1; n++) {
+        log.info(LogMessage.DIFF_METHOD_CALCULATING.getMessageString());
+
+        for (int m = 0; m < conf.m-1; m++) {
+            for (int n = 1; n < conf.n-1; n++) {
                 matrix[m+1][n] = (
                         matrix[m][n-1] * gamma +                    // left bottom point
                         matrix[m][n+1] * gamma +                    // right bottom point
-                        matrix[m][n  ] * (1 - 2 * gamma) +            // center bottom point
-                        solution.u(n, m) * configuration.timeStep   // predict solution in point
+                        matrix[m][n  ] * (1 - 2 * gamma) +          // center bottom point
+                        solution.u(n * conf.lengthStep, m * conf.timeStep) * conf.timeStep
                 );
             }
         }
 
         log.info(LogMessage.DIFF_METHOD_DONE.getMessageString());
 
-        return new FieldConfiguration(matrix, configuration.lengthStep, configuration.timeStep);
+        return new FieldConfiguration(matrix, conf.lengthStep, conf.timeStep);
     }
 }
