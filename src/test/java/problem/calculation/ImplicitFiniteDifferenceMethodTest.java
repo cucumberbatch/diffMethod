@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import problem.calculation.impl.ExplicitFiniteDifferenceMethod;
 import problem.models.Field;
 import problem.utils.FieldManager;
-import problem.utils.view.impl.ConsoleDataViewer;
+import problem.utils.view.impl.ConsoleDataPrinter;
 
 import java.io.IOException;
 
@@ -16,13 +16,13 @@ class ImplicitFiniteDifferenceMethodTest {
     void testImplicitFiniteDifferenceMethod1() throws IOException {
         FieldManager manager = new FieldManager();
         Field field1 = manager
-                .init(1.0, 0.1, 2, 1)
+                .init(1.0, 0.1, 6, 10)
                 .applyBoundaryCondition((x, t) -> {
                     if (x == 0) {
                         return 1;
                     }
                     if (x == 1) {
-                        return 1;
+                        return 100;
                     }
                     if (t == 0) {
                         return 5;
@@ -31,7 +31,7 @@ class ImplicitFiniteDifferenceMethodTest {
                     return 0;
                 })
                 .applyDifferenceMethod(new ExplicitFiniteDifferenceMethod())
-                .viewDataOn(new ConsoleDataViewer())
+                .viewDataOn(new ConsoleDataPrinter())
                 .done();
     }
 

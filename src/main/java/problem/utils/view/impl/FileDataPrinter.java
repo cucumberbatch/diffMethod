@@ -3,7 +3,7 @@ package problem.utils.view.impl;
 import problem.Constants;
 import problem.utils.FieldConfiguration;
 import problem.utils.LogMessage;
-import problem.utils.view.DataViewer;
+import problem.utils.view.DataPrinter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,12 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class DataFileSerializer implements DataViewer {
+public class FileDataPrinter implements DataPrinter {
     private Logger log;
     private File file;
 
-    public DataFileSerializer(String fileName) {
-        file = new File(Constants.DATA_FOLDER + fileName + ".dat");
+    public FileDataPrinter(String fileName) {
+        file = new File(Constants.DATA_FOLDER.concat(fileName).concat(".dat"));
     }
 
     @Override
@@ -27,7 +27,7 @@ public class DataFileSerializer implements DataViewer {
     }
 
     @Override
-    public void view(FieldConfiguration configuration) throws FileNotFoundException, IOException {
+    public void print(FieldConfiguration configuration) throws FileNotFoundException, IOException {
         try (FileWriter writer = new FileWriter(file, false)) {
             List<String> buffer = new ArrayList<>();
             String temp = "\t";

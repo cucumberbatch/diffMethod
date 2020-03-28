@@ -2,8 +2,8 @@ import problem.Constants;
 import problem.calculation.impl.ExplicitFiniteDifferenceMethod;
 import problem.conditions.impl.OneDimensionHeatConductionBoundaryCondition;
 import problem.utils.FieldManager;
-import problem.utils.view.impl.ConsoleDataViewer;
-import problem.utils.view.impl.DataFileSerializer;
+import problem.utils.view.impl.ConsoleDataPrinter;
+import problem.utils.view.impl.FileDataPrinter;
 
 import java.io.IOException;
 
@@ -15,10 +15,9 @@ public class Main {
         manager.init(Constants.Length, Constants.Time, Constants.N, Constants.M)
                 .applyBoundaryCondition(new OneDimensionHeatConductionBoundaryCondition())
                 .applyDifferenceMethod(new ExplicitFiniteDifferenceMethod())
-                .viewDataOn(new ConsoleDataViewer())
-                .viewDataOn(new DataFileSerializer("file"))
+                .viewDataOn(new ConsoleDataPrinter())
+                .viewDataOn(new FileDataPrinter("file"))
                 .done();
-
     }
 
 }

@@ -6,6 +6,6 @@ import problem.utils.Loggable;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public interface DataViewer extends Loggable {
-    void view(FieldConfiguration configuration) throws FileNotFoundException, IOException;
+public interface DataPrinter extends Loggable {
+    void print(FieldConfiguration configuration) throws FileNotFoundException, IOException;
 }

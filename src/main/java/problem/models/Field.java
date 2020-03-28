@@ -3,7 +3,7 @@ package problem.models;
 import problem.calculation.FiniteDifferenceMethod;
 import problem.conditions.BoundaryCondition;
 import problem.utils.FieldConfiguration;
-import problem.utils.view.DataViewer;
+import problem.utils.view.DataPrinter;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,9 +46,9 @@ public class Field {
         method.solve(configuration);
     }
 
-    public void viewDataOn(DataViewer container) throws IOException {
-        container.setLogger(log);
-        container.view(configuration);
+    public void viewDataOn(DataPrinter printer) throws IOException {
+        printer.setLogger(log);
+        printer.print(configuration);
     }
 
     @Override

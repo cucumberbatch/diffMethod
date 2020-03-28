@@ -3,7 +3,7 @@ package problem.utils;
 import problem.calculation.FiniteDifferenceMethod;
 import problem.conditions.BoundaryCondition;
 import problem.models.Field;
-import problem.utils.view.DataViewer;
+import problem.utils.view.DataPrinter;
 
 import java.io.IOException;
 
@@ -26,13 +26,13 @@ public class FieldManager {
         return this;
     }
 
-    public FieldManager applyDifferenceMethod(FiniteDifferenceMethod diffMethod) {
-        field.applyDifferenceMethod(diffMethod);
+    public FieldManager applyDifferenceMethod(FiniteDifferenceMethod method) {
+        field.applyDifferenceMethod(method);
         return this;
     }
 
-    public FieldManager viewDataOn(DataViewer viewer) throws IOException {
-        field.viewDataOn(viewer);
+    public FieldManager viewDataOn(DataPrinter printer) throws IOException {
+        field.viewDataOn(printer);
         return this;
     }
 

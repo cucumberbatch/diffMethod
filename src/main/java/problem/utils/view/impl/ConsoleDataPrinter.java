@@ -2,15 +2,15 @@ package problem.utils.view.impl;
 
 import problem.Constants;
 import problem.utils.FieldConfiguration;
-import problem.utils.view.DataViewer;
+import problem.utils.view.DataPrinter;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConsoleDataViewer implements DataViewer {
+public class ConsoleDataPrinter implements DataPrinter {
     @Override
-    public void view(FieldConfiguration configuration) {
+    public void print(FieldConfiguration configuration) {
         DecimalFormat formatter = new DecimalFormat(Constants.CONSOLE_OUTPUT_FORMAT);
         List<String> buffer = new ArrayList<>();
         String temp = "  --  \t| ";
