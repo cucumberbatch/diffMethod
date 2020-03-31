@@ -51,6 +51,10 @@ public class Field {
         printer.print(configuration);
     }
 
+    public double[][] getDataTable() {
+        return configuration.matrix;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
