@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import problem.Constants;
 import problem.calculation.impl.CrankNicolsonFiniteDifferenceMethod;
-import problem.calculation.impl.ExplicitFiniteDifferenceMethod;
 import problem.calculation.impl.GeneralFiniteDifferenceMethod;
 import problem.calculation.impl.ImplicitFiniteDifferenceMethod;
 import problem.conditions.BoundaryCondition;
@@ -15,89 +14,74 @@ import problem.utils.matrix.solver.impl.TridiagonalMatrixAlgorithm;
 import problem.utils.view.impl.ConsoleDataPrinter;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 class ImplicitFiniteDifferenceMethodTest {
-
     private static final double DELTA = 1E-5;
 
+
     @Test
-    void testStabilityOfFiniteDifferenceMethods() throws IOException {
+    void testFieldManager() throws IOException {
+        FieldManager manager = new FieldManager();
+        Field field1 = manager
+                .init(1, 1, 5, 5)
+                .done();
+
+        Assertions.assertNotNull(field1.getDataTable());
+    }
+
+    @Test
+    void testImplicitMethodWithTridiagonalAlgorithm() throws IOException {
         double length = 1.0d;
-        double time = 0.1d;
-        int lengthSteps = 6;
-        int timeSteps = 10;
+        double time = 5.0d;
+        int lengthSteps = 25;
+        int timeSteps = 50;
 
         BoundaryCondition condition = (x, t) -> {
             if (x == 0) {
-                return 20;
+                return 1;
             }
-            if (x == length) {
-                return 0;
+            if (x == 1) {
+                return 100;
             }
             if (t == 0) {
                 return 5;
             }
             return 0;
         };
-
         FieldManager manager = new FieldManager();
         Field field1 = manager
                 .init(length, time, lengthSteps, timeSteps)
                 .applyBoundaryCondition(condition)
-                .applyDifferenceMethod(new ExplicitFiniteDifferenceMethod())
-                .done();
-
-        Field field2 = manager
-                .init(length, time, lengthSteps, timeSteps)
-                .applyBoundaryCondition(condition)
-                .applyDifferenceMethod(new CrankNicolsonFiniteDifferenceMethod(new GaussMatrixAlgorithm()))
-                .done();
-
-        Assertions.assertEquals(field1, field2);
-    }
-
-
-    @Test
-    void testImplicitMethodWithTridiagonalAlgorithm() throws IOException {
-        FieldManager manager = new FieldManager();
-        Field field1 = manager
-                .init(1.0, 0.1, 6, 10)
-                .applyBoundaryCondition((x, t) -> {
-                    if (x == 0) {
-                        return 1;
-                    }
-                    if (x == 1) {
-                        return 100;
-                    }
-                    if (t == 0) {
-                        return 5;
-                    }
-
-                    return 0;
-                })
                 .applyDifferenceMethod(new ImplicitFiniteDifferenceMethod(new TridiagonalMatrixAlgorithm()))
                 .viewDataOn(new ConsoleDataPrinter())
                 .done();
+
+        Assertions.assertNotNull(field1.getDataTable());
     }
 
     @Test
     void testImplicitMethodWithGauss() throws IOException {
+        double length = 1.0d;
+        double time = 5.0d;
+        int lengthSteps = 25;
+        int timeSteps = 50;
+
+        BoundaryCondition condition = (x, t) -> {
+            if (x == 0) {
+                return 1;
+            }
+            if (x == 1) {
+                return 100;
+            }
+            if (t == 0) {
+                return 5;
+            }
+            return 0;
+        };
         FieldManager manager = new FieldManager();
         Field field1 = manager
-                .init(1.0, 0.1, 20, 25)
-                .applyBoundaryCondition((x, t) -> {
-                    if (x == 0) {
-                        return 1;
-                    }
-                    if (x == 1) {
-                        return 100;
-                    }
-                    if (t == 0) {
-                        return 5;
-                    }
-
-                    return 0;
-                })
+                .init(length, time, lengthSteps, timeSteps)
                 .applyDifferenceMethod(new ImplicitFiniteDifferenceMethod(new GaussMatrixAlgorithm()))
                 .viewDataOn(new ConsoleDataPrinter())
                 .done();
@@ -130,8 +114,8 @@ class ImplicitFiniteDifferenceMethodTest {
     void testCrankNicolsonMethodWithGauss() throws IOException {
         double length = 1.0d;
         double time = 5.0d;
-        int lengthSteps = 15;
-        int timeSteps = 15;
+        int lengthSteps = 250;
+        int timeSteps = 500;
 
         FieldManager manager = new FieldManager();
         Field field1 = manager
@@ -155,11 +139,43 @@ class ImplicitFiniteDifferenceMethodTest {
     }
 
     @Test
+    void testGeneralMethodWithGauss() throws IOException {
+        FieldManager manager = new FieldManager();
+        Field field1 = manager
+                .init(1.0, 0.1, 20, 25)
+                .applyBoundaryCondition((x, t) -> {
+                    if (x == 0) {
+                        return 1;
+                    }
+                    if (x == 1) {
+                        return 100;
+                    }
+                    if (t == 0) {
+                        return 5;
+                    }
+
+                    return 0;
+                })
+                .applyDifferenceMethod(new GeneralFiniteDifferenceMethod(1.0d, new GaussMatrixAlgorithm()))
+                .viewDataOn(new ConsoleDataPrinter())
+                .done();
+
+        double[][] table = field1.getDataTable();
+        boolean hasNaN = false;
+        int index = 0;
+        while (!hasNaN || index < table.length) {
+            hasNaN = Arrays.stream(table[index++]).filter(Double::isNaN).toArray().length > 0;
+        }
+
+        Assertions.assertFalse(hasNaN);
+    }
+
+    @Test
     void testGeneralAndCrankNicolsonMethodEquality() throws IOException {
-        double length = 1.0d;
-        double time = 0.1d;
-        int lengthSteps = 6;
-        int timeSteps = 10;
+        double length = 0.75d;
+        double time = 1.0d;
+        int lengthSteps = 20;
+        int timeSteps = 20;
 
         BoundaryCondition condition = (x, t) -> {
             if (x == 0) {
@@ -179,6 +195,7 @@ class ImplicitFiniteDifferenceMethodTest {
                 .init(length, time, lengthSteps, timeSteps)
                 .applyBoundaryCondition(condition)
                 .applyDifferenceMethod(new GeneralFiniteDifferenceMethod(0.5d, new GaussMatrixAlgorithm()))
+                .viewDataOn(new ConsoleDataPrinter())
                 .done();
 
         Field field2 = manager
@@ -223,6 +240,7 @@ class ImplicitFiniteDifferenceMethodTest {
                 .init(length, time, lengthSteps, timeSteps)
                 .applyBoundaryCondition(condition)
                 .applyDifferenceMethod(new ImplicitFiniteDifferenceMethod(new GaussMatrixAlgorithm()))
+                .viewDataOn(new ConsoleDataPrinter())
                 .done();
 
         Assertions.assertArrayEquals(field1.getDataTable()[1], field2.getDataTable()[1], DELTA);

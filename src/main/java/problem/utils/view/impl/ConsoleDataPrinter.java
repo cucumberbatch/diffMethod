@@ -34,6 +34,6 @@ public class ConsoleDataPrinter implements DataPrinter {
             buffer.add(temp + (m == 0 ? "" : "\n"));
         }
 
-        System.out.print(buffer);
+        System.out.print(buffer + "\n");
     }
 }

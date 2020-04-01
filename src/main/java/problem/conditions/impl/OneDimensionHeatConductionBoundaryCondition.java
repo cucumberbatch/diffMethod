@@ -18,16 +18,17 @@ public class OneDimensionHeatConductionBoundaryCondition implements BoundaryCond
 
         if (t == 0) {
             // u(x, 0) = 0
-            return 10.0d;
-        } else if (x == 0) {
-            // u(0, t) = 0
-            return Constants.U0;
+            return 0.0d;
         }
 
-        if (x == Constants.Length) {
+        if (x == 0) {
+            // u(0, t) = 0
+            return 1.0d;
+        } else if (x == Constants.Length) {
             // u(l, t) = 0
-            return 3.0d;
+            return 0.0d;
         }
+
         return 0.0d;
     }
 }

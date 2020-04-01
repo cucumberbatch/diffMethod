@@ -41,16 +41,16 @@ public class GeneralFiniteDifferenceMethod implements FiniteDifferenceMethod {
         // Loop by all the time elements
         for (int m = 1; m < conf.m; m++) {
             // Loop by the length elements to fill the SoLE (System of Linear Equations)
-            for (int n = 1; n < conf.n-1; n++) {
+            for (int n = 0; n < conf.n-2; n++) {
                 // Collect data into left and top elements
-                if (n > 1) {
-                    A[n-1][n-2] = A[n-2][n-1] = Constants.a_sqr;
+                if (n > 0) {
+                    A[n][n-1] = A[n-1][n] = Constants.a_sqr;
                 }
                 // Collect data into middle and y elements
-                A[n-1][n-1] = -2 * (Constants.a_sqr + 0.5d * weight_inv * lambda);
-                y[n-1] = 2 * weight_inv * ((1-weight) * Constants.a_sqr - 0.5d * lambda) * matrix[m-1][n]
-                        - (1-weight) * weight_inv * Constants.a_sqr * (matrix[m-1][n-1] + matrix[m-1][n+1])
-                        + weight_inv * conf.lengthStep * conf.lengthStep * solution.u((n-1) * conf.lengthStep, (m-1) * conf.timeStep);
+                A[n][n] = -2 * (Constants.a_sqr + 0.5d * weight_inv * lambda);
+                y[n] = 2 * weight_inv * ((1-weight) * Constants.a_sqr - 0.5d * lambda) * matrix[m-1][n+1]
+                        - (1-weight) * weight_inv * Constants.a_sqr * (matrix[m-1][n] + matrix[m-1][n+2])
+                        + weight_inv * conf.lengthStep * conf.lengthStep * solution.u(n * conf.lengthStep, (m-1) * conf.timeStep);
             }
 
             // Subtract from the first and last rows
@@ -61,7 +61,7 @@ public class GeneralFiniteDifferenceMethod implements FiniteDifferenceMethod {
             x = algorithm.solve(A, y);
 
             // Insert calculated data
-            if (conf.n - 2 >= 0) System.arraycopy(x, 0, matrix[m], 1, conf.n - 2);
+            System.arraycopy(x, 0, matrix[m], 1, conf.n - 2);
         }
 
         log.info(LogMessage.DIFF_METHOD_DONE.getMessageString());
