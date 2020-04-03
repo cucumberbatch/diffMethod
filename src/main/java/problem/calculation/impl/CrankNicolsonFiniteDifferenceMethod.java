@@ -42,7 +42,7 @@ public class CrankNicolsonFiniteDifferenceMethod implements FiniteDifferenceMeth
                 if (n > 0) {
                     A[n][n - 1] = A[n - 1][n] = Constants.a_sqr;
                 }
-
+                // Collect data into diagonal elements and y vector
                 A[n][n] = -2 * (Constants.a_sqr + lambda);
                 y[n] = 2 * (Constants.a_sqr - lambda) * matrix[m-1][n+1]
                         - Constants.a_sqr * (matrix[m-1][n] + matrix[m-1][n+2])

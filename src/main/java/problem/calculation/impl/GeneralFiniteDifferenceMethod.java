@@ -46,7 +46,7 @@ public class GeneralFiniteDifferenceMethod implements FiniteDifferenceMethod {
                 if (n > 0) {
                     A[n][n-1] = A[n-1][n] = Constants.a_sqr;
                 }
-                // Collect data into middle and y elements
+                // Collect data into diagonal elements and y vector
                 A[n][n] = -2 * (Constants.a_sqr + 0.5d * weight_inv * lambda);
                 y[n] = 2 * weight_inv * ((1-weight) * Constants.a_sqr - 0.5d * lambda) * matrix[m-1][n+1]
                         - (1-weight) * weight_inv * Constants.a_sqr * (matrix[m-1][n] + matrix[m-1][n+2])

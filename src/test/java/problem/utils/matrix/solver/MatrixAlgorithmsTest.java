@@ -63,7 +63,7 @@ class MatrixAlgorithmsTest {
                 { 0,  0,  0, -5, 10}
         };
         double[] y = { -25, 72, -69, -156, 20 };
-        double[] result = { -10, -5, -2, -10, -3 };
+        double[] result = { -10, 5, -2, -10, -3 };
         Assertions.assertArrayEquals(result, algorithm.solve(A, y), DELTA);
     }
 
