@@ -1,10 +1,10 @@
 package problem;
 
 import math.Function;
-import math.RectangleMethodIntegral;
+import math.Integral;
+import math.LerpMethodIntegral;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import problem.calculation.impl.Integral;
 
 public class IntegralTest {
 
@@ -12,9 +12,9 @@ public class IntegralTest {
 
     @Test
     void testIntegral1() {
-        Function function = (x) -> x;
-        Integral integral = new RectangleMethodIntegral(function);
+        Function function = (x, a) -> x;
+        Integral integral = new LerpMethodIntegral(function);
 
-        Assertions.assertEquals(0.0d, integral.calculate(0, 1), DELTA);
+        Assertions.assertEquals(0.5d, integral.calculate(0, 1), DELTA);
     }
 }
