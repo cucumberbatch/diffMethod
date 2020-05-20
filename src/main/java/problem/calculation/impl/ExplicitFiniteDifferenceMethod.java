@@ -23,7 +23,7 @@ public final class ExplicitFiniteDifferenceMethod implements FiniteDifferenceMet
         double gamma = Constants.a_sqr * conf.timeStep / conf.lengthStep / conf.lengthStep;
 
         if (gamma > 0.5d) {
-            log.warning(LogMessage.DIFF_METHOD_INACCURACY.getMessageString() + " :\tgamma = " + Double.toString(gamma));
+            log.warning(LogMessage.DIFF_METHOD_INACCURACY.getMessageString() + " :\tgamma = " + gamma);
         }
 
         log.info(LogMessage.DIFF_METHOD_CALCULATING.getMessageString());
