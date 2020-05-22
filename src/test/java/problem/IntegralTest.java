@@ -1,8 +1,8 @@
 package problem;
 
 import math.Function;
-import math.Integral;
-import math.LerpMethodIntegral;
+import math.calculations.integrals.Integral;
+import math.calculations.integrals.impl.LerpMethodIntegral;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

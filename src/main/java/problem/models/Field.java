@@ -1,6 +1,6 @@
 package problem.models;
 
-import problem.calculation.FiniteDifferenceMethod;
+import problem.calculations.FiniteDifferenceMethod;
 import problem.conditions.BoundaryCondition;
 import problem.utils.FieldConfiguration;
 import problem.utils.view.DataPrinter;

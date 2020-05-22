@@ -1,4 +1,6 @@
-package math;
+package math.calculations.integrals;
+
+import math.Function;
 
 public abstract class AbstractIntegral implements Integral {
     protected Function function;

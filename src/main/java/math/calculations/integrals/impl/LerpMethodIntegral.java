@@ -1,4 +1,7 @@
-package math;
+package math.calculations.integrals.impl;
+
+import math.calculations.integrals.AbstractIntegral;
+import math.Function;
 
 import static java.lang.Math.abs;
 import static math.Constants.epsilon;

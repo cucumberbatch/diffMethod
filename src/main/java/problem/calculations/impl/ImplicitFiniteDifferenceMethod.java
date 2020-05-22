@@ -1,19 +1,19 @@
-package problem.calculation.impl;
+package problem.calculations.impl;
 
 import problem.Constants;
-import problem.calculation.FiniteDifferenceMethod;
+import problem.calculations.FiniteDifferenceMethod;
 import problem.solution.Solution;
 import problem.utils.FieldConfiguration;
 import problem.utils.LogMessage;
-import problem.utils.matrix.solver.LinearEquationsSystemSolver;
+import math.calculations.matrix.LinearEquationsSystemSolver;
 
 import java.util.logging.Logger;
 
-public class CrankNicolsonFiniteDifferenceMethod implements FiniteDifferenceMethod {
+public class ImplicitFiniteDifferenceMethod implements FiniteDifferenceMethod {
     private LinearEquationsSystemSolver algorithm;
     private Logger log;
 
-    public CrankNicolsonFiniteDifferenceMethod(LinearEquationsSystemSolver algorithm) {
+    public ImplicitFiniteDifferenceMethod(LinearEquationsSystemSolver algorithm) {
         this.algorithm = algorithm;
     }
 
@@ -39,14 +39,14 @@ public class CrankNicolsonFiniteDifferenceMethod implements FiniteDifferenceMeth
         for (int m = 1; m < conf.m; m++) {
             // Loop by the length elements to fill the SoLE (System of Linear Equations)
             for (int n = 0; n < conf.n-2; n++) {
+                // Collect data into left and top elements
                 if (n > 0) {
-                    A[n][n - 1] = A[n - 1][n] = Constants.a_sqr;
+                    A[n][n-1] = A[n-1][n] = Constants.a_sqr;
                 }
                 // Collect data into diagonal elements and y vector
-                A[n][n] = -2 * (Constants.a_sqr + lambda);
-                y[n] = 2 * (Constants.a_sqr - lambda) * matrix[m-1][n+1]
-                        - Constants.a_sqr * (matrix[m-1][n] + matrix[m-1][n+2])
-                        + 2 * conf.lengthStep * conf.lengthStep * solution.u(n * conf.lengthStep, (m-1) * conf.timeStep);
+                A[n][n] = -2 * (Constants.a_sqr + 0.5d * lambda);
+                y[n] = -lambda * matrix[m-1][n+1]
+                        + conf.lengthStep * conf.lengthStep * solution.u(n * conf.lengthStep, (m-1) * conf.timeStep);
             }
 
             // Subtract from the first and last rows
@@ -59,6 +59,7 @@ public class CrankNicolsonFiniteDifferenceMethod implements FiniteDifferenceMeth
             // Insert calculated data
             System.arraycopy(x, 0, matrix[m], 1, conf.n - 2);
         }
+
 
         log.info(LogMessage.DIFF_METHOD_DONE.getMessageString());
 

@@ -1,7 +1,7 @@
-package problem.calculation.impl;
+package problem.calculations.impl;
 
 import problem.Constants;
-import problem.calculation.FiniteDifferenceMethod;
+import problem.calculations.FiniteDifferenceMethod;
 import problem.solution.Solution;
 import problem.utils.FieldConfiguration;
 import problem.utils.LogMessage;

@@ -1,4 +1,4 @@
-package problem.calculation;
+package problem.calculations;
 
 import problem.utils.FieldConfiguration;
 import problem.utils.Loggable;

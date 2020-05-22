@@ -1,9 +1,9 @@
-package problem.utils.matrix.solver;
+package math.calculations.matrix.solver;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import problem.utils.matrix.solver.impl.GaussMatrixAlgorithm;
-import problem.utils.matrix.solver.impl.TridiagonalMatrixAlgorithm;
+import math.calculations.matrix.impl.GaussMatrixAlgorithm;
+import math.calculations.matrix.impl.TridiagonalMatrixAlgorithm;
 
 class MatrixAlgorithmsTest {
 

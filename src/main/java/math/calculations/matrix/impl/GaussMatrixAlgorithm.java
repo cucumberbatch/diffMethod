@@ -1,6 +1,6 @@
-package problem.utils.matrix.solver.impl;
+package math.calculations.matrix.impl;
 
-import problem.utils.matrix.solver.LinearEquationsSystemSolver;
+import math.calculations.matrix.LinearEquationsSystemSolver;
 
 public class GaussMatrixAlgorithm implements LinearEquationsSystemSolver {
     @Override

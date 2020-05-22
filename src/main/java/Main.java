@@ -1,9 +1,9 @@
 import problem.Constants;
-import problem.calculation.impl.ExplicitFiniteDifferenceMethod;
+import problem.calculations.impl.ExplicitFiniteDifferenceMethod;
 import problem.conditions.impl.OneDimensionHeatConductionBoundaryCondition;
 import problem.utils.FieldManager;
-import problem.utils.matrix.solver.LinearEquationsSystemSolver;
-import problem.utils.matrix.solver.impl.GaussMatrixAlgorithm;
+import math.calculations.matrix.LinearEquationsSystemSolver;
+import math.calculations.matrix.impl.GaussMatrixAlgorithm;
 import problem.utils.view.impl.FileDataPrinter;
 
 import java.io.IOException;

@@ -1,18 +1,18 @@
-package problem.calculation;
+package problem.calculations;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import problem.Constants;
-import problem.calculation.impl.CrankNicolsonFiniteDifferenceMethod;
-import problem.calculation.impl.ExplicitFiniteDifferenceMethod;
-import problem.calculation.impl.GeneralFiniteDifferenceMethod;
-import problem.calculation.impl.ImplicitFiniteDifferenceMethod;
+import problem.calculations.impl.CrankNicolsonFiniteDifferenceMethod;
+import problem.calculations.impl.ExplicitFiniteDifferenceMethod;
+import problem.calculations.impl.GeneralFiniteDifferenceMethod;
+import problem.calculations.impl.ImplicitFiniteDifferenceMethod;
 import problem.conditions.BoundaryCondition;
 import problem.conditions.impl.OneDimensionHeatConductionBoundaryCondition;
 import problem.models.Field;
 import problem.utils.FieldManager;
-import problem.utils.matrix.solver.impl.GaussMatrixAlgorithm;
-import problem.utils.matrix.solver.impl.TridiagonalMatrixAlgorithm;
+import math.calculations.matrix.impl.GaussMatrixAlgorithm;
+import math.calculations.matrix.impl.TridiagonalMatrixAlgorithm;
 import problem.utils.view.impl.ConsoleDataPrinter;
 
 import java.io.IOException;
