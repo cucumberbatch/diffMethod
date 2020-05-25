@@ -7,17 +7,29 @@ import problem.utils.view.DataPrinter;
 import problem.utils.view.impl.ConsoleDataPrinter;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import static java.lang.Math.PI;
 
 // TODO: need a constructor with right initialization of field configuration object
 public class ReactionDiffusionProblem {
     private FieldConfiguration configuration;
     private Function[] functions;
     private Function[] conditions;
-    private int functionsNumber;
+    private double[] diffusion;
+
+
+    public ReactionDiffusionProblem(FieldConfiguration configuration, Function[] functions, Function[] conditions, double[] diffusion) {
+        this(configuration);
+        this.setFunctions(functions);
+        this.setConditions(conditions);
+        this.setDiffusion(diffusion);
+    }
+
+    public ReactionDiffusionProblem(FieldConfiguration configuration) {
+        this.configuration = configuration;
+    }
+
+    public ReactionDiffusionProblem(int x, double dx, int t, double dt) {
+        this(new FieldConfiguration(new double[x][t], dx, dt));
+    }
 
     public Function[] getFunctions() {
         return functions;
@@ -26,19 +38,23 @@ public class ReactionDiffusionProblem {
     public void setFunctions(Function[] functions) {
         if (functions == null) return;
         this.functions = functions;
-        this.functionsNumber = functions.length;
     }
 
     public Function[] getConditions() {
         return conditions;
     }
 
+    private void setDiffusion(double[] diffusion) {
+        this.diffusion = diffusion;
+    }
+
     public void setConditions(Function[] conditions) {
+        if (conditions == null) return;
         this.conditions = conditions;
     }
 
     public int getFunctionsNumber() {
-        return functionsNumber;
+        return functions.length;
     }
 
     public void display() throws IOException {
@@ -51,36 +67,48 @@ public class ReactionDiffusionProblem {
 
     // TODO: need some clean-up
     public void calculate() {
-        int pts = 315;
-        double[] fi;
-        double[] a = new double[pts];
+        double[][][] u = new double[functions.length][configuration.m][configuration.n];
+        double[][] fi = new double[configuration.m][Fourier.N];
+        double[][] a = new double[configuration.m][Fourier.N];
+        double[][] table = configuration.matrix;
 
-        double dx = 0.1d;
-        double[] x = new double[pts];
-        Function f = (X, A) -> X < 0.5d ? X : X - 0.5d;
-        for (int i = 0; i < pts; i++) {
-            x[i] = dx * i;
-            a[i] = f.value(x[i]);
-        }
+        // итерироваие по функциям для первого слоя
+        // . . .
 
-        double[] coefficients = Fourier.transform(a, 0, PI);
-        fi = Fourier.inverseTransform(coefficients, x);
+            // нахождение значений данной функции при начальных условиях
+            // . . .
 
-        List<Integer> index = new ArrayList<>();
-        List<Double> harmonics = new ArrayList<>();
-        for (int i = 0; i < coefficients.length; i++) {
-            index.add(i);
-            harmonics.add(coefficients[i]);
-        }
+        // итерирование по слоям начиная со второго
+        // . . .
 
-        System.out.println("~  H a r m o n i c s  ~");
-        for (int i = 0; i < index.size(); i++) {
-            System.out.println(index.get(i) + "\t|\t" + harmonics.get(i));
-        }
+            // итерироваие по функциям
+            // . . .
 
-        System.out.println("-  V a l u e s  -");
-        for (int i = 0; i < pts; i++) {
-            System.out.println(x[i] + "\t|\t" + a[i] + "\t|\t" + fi[i]);
-        }
+                // итерирование по функцям распределения
+                // . . .
+
+                    // нахождение Фурье образа для каждого распределения
+                    // . . .
+
+                // нахождение значений функции при полученных значениях распределения
+                // . . .
+
+
+//        for (int equationIndex = 0; equationIndex < functions.length; equationIndex++) {
+//            for (int n = 0; n < configuration.n; n++) {
+//                table[0][n] = functions[]conditions[0].value(configuration.lengthStep * n);
+//            }
+//
+//            double factor = configuration.timeStep * diffusion[equationIndex] * PI * PI / configuration.length / configuration.length;
+//
+//            for (int layerIndex = 1; layerIndex < configuration.m; layerIndex++) {
+//                fi[layerIndex] = Fourier.transform(table[layerIndex - 1], 0, configuration.length);
+//                for (int coefficientIndex = 0; coefficientIndex < Fourier.N; coefficientIndex++) {
+//                    a[layerIndex][coefficientIndex] = (1 / (factor * coefficientIndex * coefficientIndex - 1))
+//                                    * (a[layerIndex - 1][coefficientIndex] + configuration.timeStep * fi[layerIndex][coefficientIndex]);
+//                }
+//                u[equationIndex][layerIndex] = Fourier.inverseTransform(a[layerIndex], configuration.lengthStep);
+//            }
+//        }
     }
 }

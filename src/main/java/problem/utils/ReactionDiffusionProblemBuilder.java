@@ -9,8 +9,17 @@ import java.io.IOException;
 public class ReactionDiffusionProblemBuilder {
     private ReactionDiffusionProblem problem;
 
-    public ReactionDiffusionProblemBuilder() {
-        problem = new ReactionDiffusionProblem();
+
+    public ReactionDiffusionProblemBuilder grid(double length, int lengthPoints, double time, int timePoints) {
+        double dx = length / lengthPoints;
+        double dt = time / timePoints;
+        this.grid(new FieldConfiguration(new double[lengthPoints + 1][timePoints + 1], dx, dt));
+        return this;
+    }
+
+    public ReactionDiffusionProblemBuilder grid(FieldConfiguration configuration) {
+        problem = new ReactionDiffusionProblem(configuration);
+        return this;
     }
 
     public ReactionDiffusionProblemBuilder system(Function... functions) {

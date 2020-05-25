@@ -20,18 +20,19 @@ public class Fourier implements Series {
         return c;
     }
 
-    /*public static double[] transform(double[] f, double[] x) {
+    public static double[] transform(double[] f, double[] x) {
         int length = f.length;
+        double dx = x[1] - x[0];
         double[] c = new double[N];
         for (int n = 0; n < N; n++) {
             c[n] = 0;
             for (int i = 0; i < length; i++) {
-                c[n] += f[i] * cos((PI * n * dx * i + dx / 2) / x[x.length]) * dx;
+                c[n] += f[i] * cos((PI * n * dx * i) / x[x.length - 1]) * dx;
             }
-            c[n] = 2 / x[x.length] * c[n];
+            c[n] = 2 / x[x.length - 1] * c[n];
         }
         return c;
-    }*/
+    }
 
     public static double[] inverseTransform(double[] c, double[] x) {
         int length = x.length;
@@ -40,6 +41,18 @@ public class Fourier implements Series {
             f[ix] = c[0] / 2;
             for (int i = 1; i < N; i++) {
                 f[ix] += c[i] * cos(PI * x[ix] * i / x[length - 1]);
+            }
+        }
+        return f;
+    }
+
+    public static double[] inverseTransform(double[] c, double dx) {
+        int length = c.length;
+        double[] f = new double[length];
+        for (int ix = 0; ix < length; ix++) {
+            f[ix] = c[0] / 2;
+            for (int i = 1; i < N; i++) {
+                f[ix] += c[i] * cos(PI * dx * ix * i / (dx * (length - 1)));
             }
         }
         return f;

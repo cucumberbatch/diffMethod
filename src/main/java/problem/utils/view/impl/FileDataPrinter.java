@@ -2,7 +2,6 @@ package problem.utils.view.impl;
 
 import problem.Constants;
 import problem.utils.FieldConfiguration;
-import problem.utils.LogMessage;
 import problem.utils.view.DataPrinter;
 
 import java.io.File;
@@ -56,7 +55,7 @@ public class FileDataPrinter implements DataPrinter {
                 writer.write(row.replace(".", ","));
             }
 
-            log.info(LogMessage.DATA_SERIALIZER_DONE.getMessageString());
+//            log.info(LogMessage.DATA_SERIALIZER_DONE.getMessageString());
         }
     }
 }
