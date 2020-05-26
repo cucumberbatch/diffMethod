@@ -3,7 +3,6 @@ package problem;
 import org.junit.jupiter.api.Test;
 import problem.models.ReactionDiffusionProblem;
 import problem.utils.ReactionDiffusionProblemBuilder;
-import problem.utils.view.impl.FileDataPrinter;
 
 import java.io.IOException;
 
@@ -29,8 +28,9 @@ class ReactionDiffusionProblemTest {
                 .initial(
                         (x, a) -> sin(x), // initial distribution of U1(x)
                         (x, a) -> x) // initial distribution of U2(x)
+                .diffusion(1.0d, 1.0d)
                 .calculate()
-                .display(new FileDataPrinter("fourier_test"))
+//                .display(new FileDataPrinter("fourier_test"))
                 .build();
 
 //        problem.display();

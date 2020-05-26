@@ -32,6 +32,11 @@ public class ReactionDiffusionProblemBuilder {
         return this;
     }
 
+    public ReactionDiffusionProblemBuilder diffusion(double... values) {
+        this.problem.setDiffusion(values);
+        return this;
+    }
+
     public ReactionDiffusionProblemBuilder calculate() {
         this.problem.calculate();
         return this;
@@ -50,4 +55,5 @@ public class ReactionDiffusionProblemBuilder {
     public ReactionDiffusionProblem build() {
         return problem;
     }
+
 }
