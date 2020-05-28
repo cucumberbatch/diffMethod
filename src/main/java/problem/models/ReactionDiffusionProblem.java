@@ -2,6 +2,7 @@ package problem.models;
 
 import math.Function;
 import math.calculations.series.Fourier;
+import math.calculations.series.SineFourierCore;
 import problem.utils.FieldConfiguration;
 import problem.utils.view.DataPrinter;
 import problem.utils.view.impl.ConsoleDataPrinter;
@@ -68,42 +69,51 @@ public class ReactionDiffusionProblem {
     }
 
     // TODO: needs to check for the correct working
-    public void calculate() {
+    public void calculate(int targetDistribution) {
+        boolean isTargetDistributionIndexValid = targetDistribution < functions.length;
+        if (!isTargetDistributionIndexValid) return;
+
+        Fourier fourier = new Fourier(new SineFourierCore(), configuration.n);
+
         double[][][] u  = new double[configuration.m][configuration.n][functions.length];
         double[][][] f  = new double[configuration.m][configuration.n][functions.length];
-        double[][][] a  = new double[configuration.m][functions.length][Fourier.N];
-        double[][][] fi = new double[configuration.m][functions.length][Fourier.N];
-        double[][] table = configuration.matrix;
+        double[][][] a  = new double[configuration.m][functions.length][fourier.amount()];
+        double[][][] fi = new double[configuration.m][functions.length][fourier.amount()];
+
+        int layerIndex;         // переменная индекса слоя
+        int lengthIndex;        // переменная индекса элемента длины слоя
+        int functionIndex;      // переменная индекса уравнения системы
+        int coefficientIndex;   // переменная индекса коэффицинтов Фурье
 
         // итерирование по всем функциям распределения при начальных условиях
-        for (int distributionFunctionIndex = 0; distributionFunctionIndex < conditions.length; distributionFunctionIndex++) {
+        for (functionIndex = 0; functionIndex < conditions.length; functionIndex++) {
 
             // массив для начального распределения
             double[] initialDistribution = new double[configuration.n];
 
             // итерирование по всей длине слоя
-            for (int lengthIndex = 0; lengthIndex < configuration.lengthStep; lengthIndex++) {
+            for (lengthIndex = 0; lengthIndex < configuration.lengthStep; lengthIndex++) {
 
                 // дискретизация начальных условий, заданных в аналитическом виде
-                initialDistribution[lengthIndex] = conditions[distributionFunctionIndex].value(lengthIndex * configuration.lengthStep);
-                u[0][lengthIndex][distributionFunctionIndex] = initialDistribution[lengthIndex];
+                initialDistribution[lengthIndex] = conditions[functionIndex].value(lengthIndex * configuration.lengthStep);
+                u[0][lengthIndex][functionIndex] = initialDistribution[lengthIndex];
             }
 
             // разложение начального распределения на коэффициенты Фурье
-            a[0][distributionFunctionIndex] = Fourier.transform(initialDistribution, 0, configuration.length);
+            a[0][functionIndex] = fourier.transform(initialDistribution, 0, configuration.length);
         }
 
         // итерирование по остальным слоям
-        for (int layerIndex = 1; layerIndex < configuration.m; layerIndex++) {
+        for (layerIndex = 1; layerIndex < configuration.m; layerIndex++) {
 
             // итерироваие по функциям распределения
-            for (int functionIndex = 0; functionIndex < functions.length; functionIndex++) {
+            for (functionIndex = 0; functionIndex < functions.length; functionIndex++) {
 
                 // массив для значений функций, зависящих от распределения на предыдущем слое
                 double[] temporaryFunction = new double[configuration.n];
 
                 // итерирование по всей длине поля
-                for (int lengthIndex = 0; lengthIndex < configuration.n; lengthIndex++) {
+                for (lengthIndex = 0; lengthIndex < configuration.n; lengthIndex++) {
 
                     // нахождение значений данной функции при значениях распределения с предыдущего слоя
                     temporaryFunction[lengthIndex] = functions[functionIndex].value(0, u[layerIndex - 1][lengthIndex]);
@@ -111,13 +121,14 @@ public class ReactionDiffusionProblem {
                 }
 
                 // нахождение Фурье образа для каждого распределения
-                fi[layerIndex][functionIndex] = Fourier.transform(temporaryFunction, 0, configuration.length);
+                fi[layerIndex][functionIndex] = fourier.transform(temporaryFunction, 0, configuration.length);
 
                 // вынесение некоторого множителя "за скобки" для уменьшения вычислительной нагрузки
                 double factor = configuration.timeStep * diffusion[functionIndex] * PI * PI / configuration.length / configuration.length;
 
+                // решение системы в преобразованном виде
                 // нахождение коэффициентов Фурье для функций распределения
-                for (int coefficientIndex = 0; coefficientIndex < Fourier.N; coefficientIndex++) {
+                for (coefficientIndex = 0; coefficientIndex < fourier.amount(); coefficientIndex++) {
                     a[layerIndex][functionIndex][coefficientIndex] =
                             (1 / (factor * coefficientIndex * coefficientIndex - 1))
                             * (a[layerIndex - 1][functionIndex][coefficientIndex]
@@ -125,31 +136,20 @@ public class ReactionDiffusionProblem {
                 }
 
                 // нахождение значений функции распределения через обратное преобразование Фурье
-                double[] temporaryDistribution = Fourier.inverseTransform(a[layerIndex][functionIndex], configuration.lengthStep);
+                double[] temporaryDistribution = fourier.inverseTransform(a[layerIndex][functionIndex], configuration.n, configuration.lengthStep);
 
                 // запись полученных значений в массив
-                for (int lengthIndex = 0; lengthIndex < configuration.n; lengthIndex++) {
+                for (lengthIndex = 0; lengthIndex < configuration.n; lengthIndex++) {
                     u[layerIndex][lengthIndex][functionIndex] = temporaryDistribution[lengthIndex];
                 }
             }
         }
 
-
-//        for (int equationIndex = 0; equationIndex < functions.length; equationIndex++) {
-//            for (int n = 0; n < configuration.n; n++) {
-//                table[0][n] = functions[]conditions[0].value(configuration.lengthStep * n);
-//            }
-//
-//            double factor = configuration.timeStep * diffusion[equationIndex] * PI * PI / configuration.length / configuration.length;
-//
-//            for (int layerIndex = 1; layerIndex < configuration.m; layerIndex++) {
-//                fi[layerIndex] = Fourier.transform(table[layerIndex - 1], 0, configuration.length);
-//                for (int coefficientIndex = 0; coefficientIndex < Fourier.N; coefficientIndex++) {
-//                    a[layerIndex][coefficientIndex] = (1 / (factor * coefficientIndex * coefficientIndex - 1))
-//                                    * (a[layerIndex - 1][coefficientIndex] + configuration.timeStep * fi[layerIndex][coefficientIndex]);
-//                }
-//                u[equationIndex][layerIndex] = Fourier.inverseTransform(a[layerIndex], configuration.lengthStep);
-//            }
-//        }
+        // запись целевой функции распределения в массив для дальнейшего вывода
+        for (layerIndex = 0; layerIndex < configuration.m; layerIndex++) {
+            for (lengthIndex = 0; lengthIndex < configuration.n; lengthIndex++) {
+                configuration.matrix[layerIndex][lengthIndex] = u[layerIndex][lengthIndex][targetDistribution];
+            }
+        }
     }
 }

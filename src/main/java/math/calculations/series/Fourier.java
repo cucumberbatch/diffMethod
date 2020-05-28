@@ -1,61 +1,48 @@
 package math.calculations.series;
 
-import static java.lang.Math.PI;
-import static java.lang.Math.cos;
-
 public class Fourier implements Series {
-    public static int N = 100;
+    private final FourierCore core;
+    private final int N;
 
-    public static double[] transform(double[] f, double a, double b) {
-        int length = f.length;
-        double dx = (b - a) / length;
-        double[] c = new double[N];
-        for (int n = 0; n < N; n++) {
-            c[n] = 0;
-            for (int i = 0; i < length; i++) {
-                c[n] += f[i] * cos((PI * n * dx * i) / b) * dx;
-            }
-            c[n] = 2 / b * c[n];
-        }
-        return c;
+
+    public Fourier(FourierCore core, int N) {
+        this.core = core;
+        this.N = N / 2;
     }
 
-    public static double[] transform(double[] f, double[] x) {
-        int length = f.length;
-        double dx = x[1] - x[0];
-        double[] c = new double[N];
-        for (int n = 0; n < N; n++) {
-            c[n] = 0;
-            for (int i = 0; i < length; i++) {
-                c[n] += f[i] * cos((PI * n * dx * i) / x[x.length - 1]) * dx;
-            }
-            c[n] = 2 / x[x.length - 1] * c[n];
-        }
-        return c;
+    public int amount() {
+        return N;
     }
 
-    public static double[] inverseTransform(double[] c, double[] x) {
-        int length = x.length;
-        double[] f = new double[length];
-        for (int ix = 0; ix < length; ix++) {
-            f[ix] = c[0] / 2;
-            for (int i = 1; i < N; i++) {
-                f[ix] += c[i] * cos(PI * x[ix] * i / x[length - 1]);
+    public double[] transform(double[] discreteFunction, double a, double b) {
+        int length = discreteFunction.length;
+        double dx = (b - a) / (double) length;
+        double[] coefficients = new double[N];
+        double x;
+
+        for (int coefficientIndex = 0; coefficientIndex < N; coefficientIndex++) {
+            for (int lengthIndex = 0; lengthIndex < length; lengthIndex++) {
+                x = dx * lengthIndex;
+                coefficients[coefficientIndex] += dx * discreteFunction[lengthIndex] * core.directMethod(x, coefficientIndex, b);
             }
+            coefficients[coefficientIndex] = coefficients[coefficientIndex] * (2 / b);
+//            coefficients[coefficientIndex] = coefficients[coefficientIndex] * b;
         }
-        return f;
+        return coefficients;
     }
 
-    public static double[] inverseTransform(double[] c, double dx) {
-        int length = c.length;
-        double[] f = new double[length];
-        for (int ix = 0; ix < length; ix++) {
-            f[ix] = c[0] / 2;
-            for (int i = 1; i < N; i++) {
-                f[ix] += c[i] * cos(PI * dx * ix * i / (dx * (length - 1)));
+    public double[] inverseTransform(double[] coefficients, int length, double dx) {
+        double[] function = new double[length];
+        double b = dx * (double) length;
+        double x;
+
+        for (int lengthIndex = 0; lengthIndex < length; lengthIndex++) {
+            function[lengthIndex] = coefficients[0] / 2;
+            x = dx * lengthIndex;
+            for (int coefficientIndex = 1; coefficientIndex < N; coefficientIndex++) {
+                function[lengthIndex] += coefficients[coefficientIndex] * core.inverseMethod(x, coefficientIndex, b);
             }
         }
-        return f;
+        return function;
     }
-
 }

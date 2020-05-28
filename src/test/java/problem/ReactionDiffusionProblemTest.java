@@ -6,18 +6,17 @@ import problem.utils.ReactionDiffusionProblemBuilder;
 
 import java.io.IOException;
 
-import static java.lang.Math.sin;
-
 class ReactionDiffusionProblemTest {
 
     @Test
     void testProblem1() throws IOException {
-        final double A = 1d;
-        final double B = 1d;
-        final double Length = 5d;
-        final double Time = 1d;
-        final int xPoints = 20;
-        final int tPoints = 20;
+        final double A = 2.1d;
+        final double B = 5.2d;
+        final double Length = 1d;
+        final double Time = 20d;
+        final int xPoints = 10;
+        final int tPoints = 10;
+        final int targetDistribution = 0;
 
         ReactionDiffusionProblemBuilder builder = new ReactionDiffusionProblemBuilder();
         ReactionDiffusionProblem problem = builder
@@ -26,14 +25,15 @@ class ReactionDiffusionProblemTest {
                         (x, a) -> A - (B + 1) * a[0] + a[0] * a[0] * a[1],
                         (x, a) -> B * a[0] - a[0] * a[0] * a[1])
                 .initial(
-                        (x, a) -> sin(x), // initial distribution of U1(x)
-                        (x, a) -> x) // initial distribution of U2(x)
-                .diffusion(1.0d, 1.0d)
-                .calculate()
-//                .display(new FileDataPrinter("fourier_test"))
+                        (x, a) -> 2.0d,     // initial distribution of U1(x)
+                        (x, a) -> 2.3d)     // initial distribution of U2(x)
+                .diffusion(
+                        4.4E-3d,            // D1
+                        2.2E-3d)            // D2
+                .calculate(targetDistribution)
+                .display()
+//                .display(new FileDataPrinter("ridiculous_test"))
                 .build();
-
-//        problem.display();
     }
 
 }

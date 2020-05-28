@@ -37,8 +37,8 @@ public class ReactionDiffusionProblemBuilder {
         return this;
     }
 
-    public ReactionDiffusionProblemBuilder calculate() {
-        this.problem.calculate();
+    public ReactionDiffusionProblemBuilder calculate(int targetDistribution) {
+        this.problem.calculate(targetDistribution);
         return this;
     }
 
