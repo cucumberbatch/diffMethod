@@ -1,4 +1,6 @@
-package math.calculations.series;
+package math.calculations.series.computing;
+
+import math.calculations.series.FourierCore;
 
 import static java.lang.Math.*;
 

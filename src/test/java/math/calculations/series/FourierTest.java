@@ -2,6 +2,7 @@ package math.calculations.series;
 
 import math.Function;
 import math.calculations.series.computing.CosineFourierCore;
+import math.calculations.series.computing.SineFourierCore;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -218,6 +219,34 @@ class FourierTest {
         }
 
         double[] result = fourier.inverseTransform(fourier.transform(f, a, b), length, h);
+
+        for (int i = 0; i < length; i++) {
+            System.out.println(i + "\t" + f[i] + "\t" + result[i]);
+        }
+
+        Assertions.assertArrayEquals(f, result, DELTA);
+    }
+
+    @Test
+    void testFourierTransforms9() {
+        Function function = (x, a) -> x < 0.5d ? x : x-0.5d;
+        double a = 0;
+        double b = 1;
+        double h = 0.01;
+        int length = (int)((b-a)/h);
+        double[] f = new double[length];
+
+        Fourier fourier = new Fourier(new SineFourierCore(), length);
+
+        for (int i = 0; i < length; i++) {
+            f[i] = function.value(i * h);
+        }
+
+        double[] result = fourier.inverseTransform(fourier.transform(f, a, b), length, h);
+
+        for (int i = 0; i < 10; i++) {
+            result = fourier.inverseTransform(fourier.transform(result, a, b), length, h);
+        }
 
         for (int i = 0; i < length; i++) {
             System.out.println(i + "\t" + f[i] + "\t" + result[i]);

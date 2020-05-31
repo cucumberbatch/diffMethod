@@ -2,7 +2,7 @@ package problem.models;
 
 import math.Function;
 import math.calculations.series.Fourier;
-import math.calculations.series.SineFourierCore;
+import math.calculations.series.computing.CosineFourierCore;
 import problem.utils.FieldConfiguration;
 import problem.utils.view.DataPrinter;
 import problem.utils.view.impl.ConsoleDataPrinter;
@@ -11,7 +11,7 @@ import java.io.IOException;
 
 import static java.lang.Math.PI;
 
-// TODO: need a constructor with right initialization of field configuration object
+
 public class ReactionDiffusionProblem {
     private FieldConfiguration configuration;
     private Function[] functions;
@@ -73,10 +73,13 @@ public class ReactionDiffusionProblem {
         boolean isTargetDistributionIndexValid = targetDistribution < functions.length;
         if (!isTargetDistributionIndexValid) return;
 
-        Fourier fourier = new Fourier(new SineFourierCore(), configuration.n);
+        Fourier fourier = new Fourier(new CosineFourierCore(), configuration.n);
 
+        // массив для значений функций, зависящих от распределения на предыдущем слое
+        double[] temporaryFunction = new double[configuration.n];
+
+//        double[][][] f  = new double[configuration.m][configuration.n][functions.length];
         double[][][] u  = new double[configuration.m][configuration.n][functions.length];
-        double[][][] f  = new double[configuration.m][configuration.n][functions.length];
         double[][][] a  = new double[configuration.m][functions.length][fourier.amount()];
         double[][][] fi = new double[configuration.m][functions.length][fourier.amount()];
 
@@ -109,15 +112,13 @@ public class ReactionDiffusionProblem {
             // итерироваие по функциям распределения
             for (functionIndex = 0; functionIndex < functions.length; functionIndex++) {
 
-                // массив для значений функций, зависящих от распределения на предыдущем слое
-                double[] temporaryFunction = new double[configuration.n];
 
                 // итерирование по всей длине поля
                 for (lengthIndex = 0; lengthIndex < configuration.n; lengthIndex++) {
 
                     // нахождение значений данной функции при значениях распределения с предыдущего слоя
                     temporaryFunction[lengthIndex] = functions[functionIndex].value(0, u[layerIndex - 1][lengthIndex]);
-                    f[layerIndex][lengthIndex][functionIndex] = temporaryFunction[lengthIndex];
+//                    f[layerIndex][lengthIndex][functionIndex] = temporaryFunction[lengthIndex];
                 }
 
                 // нахождение Фурье образа для каждого распределения

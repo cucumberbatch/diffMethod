@@ -1,5 +1,7 @@
 package math.calculations.series;
 
+import math.Function;
+
 public class Fourier implements Series {
     private final FourierCore core;
     private final int N;
@@ -26,9 +28,18 @@ public class Fourier implements Series {
                 coefficients[coefficientIndex] += dx * discreteFunction[lengthIndex] * core.directMethod(x, coefficientIndex, b);
             }
             coefficients[coefficientIndex] = coefficients[coefficientIndex] * (2 / b);
-//            coefficients[coefficientIndex] = coefficients[coefficientIndex] * b;
         }
         return coefficients;
+    }
+
+    public double[] transform(Function function, double a, double b) {
+        int length = N * 2;
+        double[] discreteFunction = new double[length];
+        double dx = (b - a) / length;
+        for (int i = 0; i < length; i++) {
+            discreteFunction[i] = function.value(a + dx * i);
+        }
+        return transform(discreteFunction, a, b);
     }
 
     public double[] inverseTransform(double[] coefficients, int length, double dx) {
