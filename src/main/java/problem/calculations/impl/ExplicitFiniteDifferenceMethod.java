@@ -6,15 +6,9 @@ import problem.solution.Solution;
 import problem.utils.FieldConfiguration;
 import problem.utils.LogMessage;
 
-import java.util.logging.Logger;
+import static problem.Constants.LOGGER;
 
 public final class ExplicitFiniteDifferenceMethod implements FiniteDifferenceMethod {
-    private Logger log;
-
-    @Override
-    public void setLogger(Logger log) {
-        this.log = log;
-    }
 
     @Override
     public FieldConfiguration solve(FieldConfiguration conf) {
@@ -23,10 +17,8 @@ public final class ExplicitFiniteDifferenceMethod implements FiniteDifferenceMet
         double gamma = Constants.a_sqr * conf.timeStep / conf.lengthStep / conf.lengthStep;
 
         if (gamma > 0.5d) {
-            log.warning(LogMessage.DIFF_METHOD_INACCURACY.getMessageString() + " :\tgamma = " + gamma);
+            LOGGER.warning(LogMessage.DIFF_METHOD_INACCURACY.getMessageString() + " :\tgamma = " + gamma);
         }
-
-        log.info(LogMessage.DIFF_METHOD_CALCULATING.getMessageString());
 
         for (int m = 0; m < conf.m-1; m++) {
             for (int n = 1; n < conf.n-1; n++) {
@@ -38,8 +30,6 @@ public final class ExplicitFiniteDifferenceMethod implements FiniteDifferenceMet
                 );
             }
         }
-
-        log.info(LogMessage.DIFF_METHOD_DONE.getMessageString());
 
         return new FieldConfiguration(matrix, conf.lengthStep, conf.timeStep);
     }

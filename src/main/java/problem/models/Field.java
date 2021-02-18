@@ -6,27 +6,12 @@ import problem.utils.FieldConfiguration;
 import problem.utils.view.DataPrinter;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Objects;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
+
+import static problem.Constants.LOGGER;
 
 public class Field {
     private FieldConfiguration configuration;
-    private static Logger log = null;
-
-    //Logger initialization with property file in resources package
-    static {
-        InputStream stream = Field.class.getClassLoader().
-                getResourceAsStream("logging.properties");
-        try {
-            LogManager.getLogManager().readConfiguration(stream);
-            log = Logger.getLogger(Field.class.getName());
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public Field(FieldConfiguration configuration) {
         this.configuration = configuration;
@@ -37,18 +22,21 @@ public class Field {
     }
 
     public void applyBoundaryCondition(BoundaryCondition condition) {
-        condition.setLogger(log);
+        LOGGER.info("Applying boundary conditions...");
         condition.apply(configuration);
+        LOGGER.info("Boundary conditions applying done!");
     }
 
     public void applyDifferenceMethod(FiniteDifferenceMethod method) {
-        method.setLogger(log);
+        LOGGER.info("Applying difference method...");
         method.solve(configuration);
+        LOGGER.info("Difference method calculation done!");
     }
 
     public void viewDataOn(DataPrinter printer) throws IOException {
-        printer.setLogger(log);
+        LOGGER.info("Preparing data output...");
         printer.print(configuration);
+        LOGGER.info("Data output preparation done!");
     }
 
     public double[][] getDataTable() {

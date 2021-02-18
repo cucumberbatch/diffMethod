@@ -1,12 +1,35 @@
 package problem;
 
+import problem.models.Field;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
+
 public class Constants {
+
+    public static Logger LOGGER;
+
+    //Logger initialization by property file
+    static {
+        InputStream stream = Field.class.getClassLoader().
+                getResourceAsStream("logging.properties");
+        try {
+            LogManager.getLogManager().readConfiguration(stream);
+            LOGGER = Logger.getLogger(Field.class.getName());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     // Parameters of grid:
     public static final double Length	= 1.0d;     // length or depth of sample
     public static final double Time		= 0.1d;     // total time of experiment
-    public static final int N			= 30;       // amount of steps for length fracture
-    public static final int M			= 200;       // amount of steps for time fracture
+    public static final int N			= 10;       // amount of steps for length fracture
+    public static final int M			= 20;       // amount of steps for time fracture
 
     // Simulation parameters
     public static final double U0 		= 1.0d;

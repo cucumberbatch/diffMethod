@@ -4,24 +4,15 @@ import problem.Constants;
 import problem.calculations.FiniteDifferenceMethod;
 import problem.solution.Solution;
 import problem.utils.FieldConfiguration;
-import problem.utils.LogMessage;
 import math.calculations.matrix.LinearEquationsSystemSolver;
-
-import java.util.logging.Logger;
 
 public class GeneralFiniteDifferenceMethod implements FiniteDifferenceMethod {
     private LinearEquationsSystemSolver algorithm;
-    private Logger log;
     private double weight;
 
     public GeneralFiniteDifferenceMethod(double weight, LinearEquationsSystemSolver algorithm) {
         this.algorithm = algorithm;
         this.weight = weight;
-    }
-
-    @Override
-    public void setLogger(Logger log) {
-        this.log = log;
     }
 
     @Override
@@ -35,8 +26,6 @@ public class GeneralFiniteDifferenceMethod implements FiniteDifferenceMethod {
         double[][] A = new double[conf.n-2][conf.n-2];
         double[]   y = new double[conf.n-2];
         double[]   x;
-
-        log.info(LogMessage.DIFF_METHOD_CALCULATING.getMessageString());
 
         // Loop by all the time elements
         for (int m = 1; m < conf.m; m++) {
@@ -63,8 +52,6 @@ public class GeneralFiniteDifferenceMethod implements FiniteDifferenceMethod {
             // Insert calculated data
             System.arraycopy(x, 0, matrix[m], 1, conf.n - 2);
         }
-
-        log.info(LogMessage.DIFF_METHOD_DONE.getMessageString());
 
         return null;
     }

@@ -4,6 +4,7 @@ import problem.conditions.impl.OneDimensionHeatConductionBoundaryCondition;
 import problem.utils.FieldManager;
 import math.calculations.matrix.LinearEquationsSystemSolver;
 import math.calculations.matrix.impl.GaussMatrixAlgorithm;
+import problem.utils.view.impl.ConsoleDataPrinter;
 import problem.utils.view.impl.FileDataPrinter;
 
 import java.io.IOException;
@@ -23,7 +24,8 @@ public class Main {
 //                .viewDataOn(new FileDataPrinter("implicit"))
 
                 .applyDifferenceMethod(new ExplicitFiniteDifferenceMethod())
-                .viewDataOn(new FileDataPrinter("explicit"))
+                .viewDataOn(new FileDataPrinter("i hate myself"))
+//                .viewDataOn(new FileDataPrinter("explicit"))
 
                 .done();
     }

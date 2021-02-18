@@ -3,15 +3,7 @@ package problem.conditions.impl;
 import problem.Constants;
 import problem.conditions.BoundaryCondition;
 
-import java.util.logging.Logger;
-
 public class OneDimensionHeatConductionBoundaryCondition implements BoundaryCondition {
-    private Logger log;
-
-    @Override
-    public void setLogger(Logger log) {
-        this.log = log;
-    }
 
     @Override
     public double u(double x, double t) {

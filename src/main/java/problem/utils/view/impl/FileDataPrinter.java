@@ -10,19 +10,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 public class FileDataPrinter implements DataPrinter {
-    private Logger log;
     private File file;
 
     public FileDataPrinter(String fileName) {
         file = new File(Constants.DATA_FOLDER.concat(fileName).concat(".dat"));
-    }
-
-    @Override
-    public void setLogger(Logger log) {
-        this.log = log;
     }
 
     @Override
@@ -54,8 +47,6 @@ public class FileDataPrinter implements DataPrinter {
             for (String row : buffer) {
                 writer.write(row.replace(".", ","));
             }
-
-//            log.info(LogMessage.DATA_SERIALIZER_DONE.getMessageString());
         }
     }
 }

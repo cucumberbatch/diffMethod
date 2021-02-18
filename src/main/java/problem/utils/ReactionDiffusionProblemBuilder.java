@@ -10,10 +10,8 @@ public class ReactionDiffusionProblemBuilder {
     private ReactionDiffusionProblem problem;
 
 
-    public ReactionDiffusionProblemBuilder grid(double length, int lengthPoints, double time, int timePoints) {
-        double dx = length / lengthPoints;
-        double dt = time / timePoints;
-        this.grid(new FieldConfiguration(new double[lengthPoints + 1][timePoints + 1], dx, dt));
+    public ReactionDiffusionProblemBuilder grid(double length, int n, double time, int m) {
+        this.grid(new FieldConfiguration(new double[m+1][n+1], length / n, time / m));
         return this;
     }
 
@@ -38,7 +36,7 @@ public class ReactionDiffusionProblemBuilder {
     }
 
     public ReactionDiffusionProblemBuilder calculate(int targetDistribution) {
-        this.problem.calculate(targetDistribution);
+//        this.problem.calculate(targetDistribution);
         return this;
     }
 

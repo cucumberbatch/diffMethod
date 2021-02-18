@@ -27,6 +27,7 @@ public class LerpMethodIntegral extends AbstractIntegral {
                 current_sum += step * (function.value(current_step, c) + function.value(current_step + step, c));
                 current_step += step;
             }
+            // Needs to try to measure a performance of using multiplication instead of dividing
             step /= 2;
             delta = abs(current_sum - previous_sum);
         }

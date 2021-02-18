@@ -4,22 +4,13 @@ import problem.Constants;
 import problem.calculations.FiniteDifferenceMethod;
 import problem.solution.Solution;
 import problem.utils.FieldConfiguration;
-import problem.utils.LogMessage;
 import math.calculations.matrix.LinearEquationsSystemSolver;
-
-import java.util.logging.Logger;
 
 public class CrankNicolsonFiniteDifferenceMethod implements FiniteDifferenceMethod {
     private LinearEquationsSystemSolver algorithm;
-    private Logger log;
 
     public CrankNicolsonFiniteDifferenceMethod(LinearEquationsSystemSolver algorithm) {
         this.algorithm = algorithm;
-    }
-
-    @Override
-    public void setLogger(Logger log) {
-        this.log = log;
     }
 
     @Override
@@ -33,8 +24,6 @@ public class CrankNicolsonFiniteDifferenceMethod implements FiniteDifferenceMeth
         double[]   y = new double[conf.n-2];
         double[]   x;
 
-        log.info(LogMessage.DIFF_METHOD_CALCULATING.getMessageString());
-
         // Loop by all the time elements
         for (int m = 1; m < conf.m; m++) {
             // Loop by the length elements to fill the SoLE (System of Linear Equations)
@@ -44,9 +33,9 @@ public class CrankNicolsonFiniteDifferenceMethod implements FiniteDifferenceMeth
                 }
                 // Collect data into diagonal elements and y vector
                 A[n][n] = -2 * (Constants.a_sqr + lambda);
-                y[n] = 2 * (Constants.a_sqr - lambda) * matrix[m-1][n+1]
+                y[n]    =  2 * (Constants.a_sqr - lambda) * matrix[m-1][n+1]
                         - Constants.a_sqr * (matrix[m-1][n] + matrix[m-1][n+2])
-                        + 2 * conf.lengthStep * conf.lengthStep * solution.u(n * conf.lengthStep, (m-1) * conf.timeStep);
+                        +  2 * conf.lengthStep * conf.lengthStep * solution.u(n * conf.lengthStep, (m-1) * conf.timeStep);
             }
 
             // Subtract from the first and last rows
@@ -59,8 +48,6 @@ public class CrankNicolsonFiniteDifferenceMethod implements FiniteDifferenceMeth
             // Insert calculated data
             System.arraycopy(x, 0, matrix[m], 1, conf.n - 2);
         }
-
-        log.info(LogMessage.DIFF_METHOD_DONE.getMessageString());
 
         return null;
     }

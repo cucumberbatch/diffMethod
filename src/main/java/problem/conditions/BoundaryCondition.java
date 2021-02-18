@@ -1,9 +1,8 @@
 package problem.conditions;
 
 import problem.utils.FieldConfiguration;
-import problem.utils.Loggable;
 
-public interface BoundaryCondition extends Loggable {
+public interface BoundaryCondition {
     double u(double x, double t);
 
     default void apply(FieldConfiguration configuration) {
