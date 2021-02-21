@@ -11,7 +11,7 @@ import static java.lang.Math.cos;
 
 class FourierTest {
 
-    private final double DELTA = 1E-2;
+    private final double DELTA = 1E-3;
 
 //    @Test
 //    void testFourierCoefficient() {
@@ -36,11 +36,11 @@ class FourierTest {
         Function function = (x, a) -> x < 0.5 ? 0 : x - 0.5;
         double a = 0;
         double b = 1;
-        double h = 0.01;
+        double h = 0.001;
         int length = (int)((b-a)/h);
         double[] f = new double[length];
 
-        Fourier fourier = new Fourier(new CosineFourierCore(), length);
+        Fourier fourier = new Fourier(new CosineFourierCore(), length * 2);
 
         for (int i = 0; i < length; i++) {
             f[i] = function.value(i * h);
@@ -60,11 +60,11 @@ class FourierTest {
         Function function = (x, a) -> x < 0.33 || x > 0.66 ? 0 : 1;
         double a = 0;
         double b = 1;
-        double h = 0.01;
+        double h = 0.001;
         int length = (int)((b-a)/h);
         double[] f = new double[length];
 
-        Fourier fourier = new Fourier(new CosineFourierCore(), length);
+        Fourier fourier = new Fourier(new CosineFourierCore(), length * 2);
 
         for (int i = 0; i < length; i++) {
             f[i] = function.value(i * h);
@@ -84,11 +84,11 @@ class FourierTest {
         Function function = (x, a) -> x < 0.33 || x > 0.66 ? 0 : 1;
         double a = 0;
         double b = 10;
-        double h = 0.1;
+        double h = 0.01;
         int length = (int)((b-a)/h);
         double[] f = new double[length];
 
-        Fourier fourier = new Fourier(new CosineFourierCore(), length);
+        Fourier fourier = new Fourier(new CosineFourierCore(), length * 2);
 
         for (int i = 0; i < length; i++) {
             f[i] = function.value(i * h);
@@ -108,11 +108,11 @@ class FourierTest {
         Function function = (x, a) -> cos(x);
         double a = 0;
         double b = 2 * PI;
-        double h = 0.1;
+        double h = 0.01;
         int length = (int)((b-a)/h);
         double[] f = new double[length];
 
-        Fourier fourier = new Fourier(new CosineFourierCore(), length);
+        Fourier fourier = new Fourier(new SineFourierCore(), length * 2);
 
         for (int i = 0; i < length; i++) {
             f[i] = function.value(i * h);
@@ -136,7 +136,7 @@ class FourierTest {
         int length = (int)((b-a)/h);
         double[] f = new double[length];
 
-        Fourier fourier = new Fourier(new CosineFourierCore(), length);
+        Fourier fourier = new Fourier(new CosineFourierCore(), length * 2);
 
         for (int i = 0; i < length; i++) {
             f[i] = function.value(i * h);
@@ -160,7 +160,7 @@ class FourierTest {
         int length = (int)((b-a)/h);
         double[] f = new double[length];
 
-        Fourier fourier = new Fourier(new SineFourierCore(), length);
+        Fourier fourier = new Fourier(new SineFourierCore(), length * 2);
 
         for (int i = 0; i < length; i++) {
             f[i] = function.value(i * h);
@@ -184,11 +184,11 @@ class FourierTest {
         Function function = (x, a) -> x < 0.5d ? x : x-0.5d;
         double a = 0;
         double b = 1;
-        double h = 0.01;
+        double h = 0.001;
         int length = (int)((b-a)/h);
         double[] f = new double[length];
 
-        Fourier fourier = new Fourier(new CosineFourierCore(), length);
+        Fourier fourier = new Fourier(new CosineFourierCore(), length * 2);
 
         for (int i = 0; i < length; i++) {
             f[i] = function.value(i * h);
@@ -208,11 +208,11 @@ class FourierTest {
         Function function = (x, a) -> x < 0.5d ? x : x-0.5d;
         double a = 0;
         double b = 1;
-        double h = 0.01;
+        double h = 0.001;
         int length = (int)((b-a)/h);
         double[] f = new double[length];
 
-        Fourier fourier = new Fourier(new SineFourierCore(), length);
+        Fourier fourier = new Fourier(new SineFourierCore(), length * 2);
 
         for (int i = 0; i < length; i++) {
             f[i] = function.value(i * h);
@@ -232,11 +232,11 @@ class FourierTest {
         Function function = (x, a) -> x < 0.5d ? x : x-0.5d;
         double a = 0;
         double b = 1;
-        double h = 0.01;
+        double h = 0.001;
         int length = (int)((b-a)/h);
         double[] f = new double[length];
 
-        Fourier fourier = new Fourier(new SineFourierCore(), length);
+        Fourier fourier = new Fourier(new SineFourierCore(), length * 2);
 
         for (int i = 0; i < length; i++) {
             f[i] = function.value(i * h);
@@ -247,6 +247,30 @@ class FourierTest {
         for (int i = 0; i < 10; i++) {
             result = fourier.inverseTransform(fourier.transform(result, a, b), length, h);
         }
+
+        for (int i = 0; i < length; i++) {
+            System.out.println(i + "\t" + f[i] + "\t" + result[i]);
+        }
+
+        Assertions.assertArrayEquals(f, result, DELTA);
+    }
+
+    @Test
+    void testFourierTransforms10() {
+        Function function = (x, a) -> x * x;
+        double a = 0;
+        double b = 1;
+        double h = 0.2;
+        int length = (int)((b-a)/h);
+        double[] f = new double[length];
+
+        Fourier fourier = new Fourier(new SineFourierCore(), length);
+
+        for (int i = 0; i < length; i++) {
+            f[i] = function.value(i * h);
+        }
+
+        double[] result = fourier.inverseTransform(fourier.transform(f, a, b), length, h);
 
         for (int i = 0; i < length; i++) {
             System.out.println(i + "\t" + f[i] + "\t" + result[i]);

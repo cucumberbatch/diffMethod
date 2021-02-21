@@ -15,10 +15,10 @@ public class ReactionDiffusionPartialDifferentialEquationSolver implements Parti
 //
 //        if (!isTargetDistributionIndexValid) return configuration;
 
-        Fourier fourier = new Fourier(new CosineFourierCore(), configuration.n);
-        Function[] functions = new Function[1];
+        Fourier    fourier    = new Fourier(new CosineFourierCore(), configuration.n);
+        Function[] functions  = new Function[1];
         Function[] conditions = new Function[1];
-        float[] diffusion = new float[1];
+        float   [] diffusion  = new float[1];
         ReactionDiffusionPartialDifferentialEquationSolver solver = new ReactionDiffusionPartialDifferentialEquationSolver();
 
         // массив для значений функций, зависящих от распределения на предыдущем слое
